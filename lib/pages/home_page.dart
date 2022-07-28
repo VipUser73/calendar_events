@@ -34,12 +34,13 @@ class HomePage extends StatelessWidget {
                 dataSource: EventDataSource(state.events),
                 initialDisplayDate: DateTime.now(),
                 onLongPress: (details) {
-                  // final provider = Provider.of<EventProvider>(context, listen: false);
-                  // provider.setDate(details.date!);
-                  // showModalBottomSheet(
-                  //   context: context,
-                  //   builder: (context) => const TasksWidget(),
-                  // );
+                  context
+                      .read<CalendarBloc>()
+                      .add(ShowTasksEvent(details.date!));
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => const TasksWidget(),
+                  );
                 },
               ),
             ),

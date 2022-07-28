@@ -1,6 +1,8 @@
+import 'package:calendar_of_events/bloc/calendar_bloc.dart';
 import 'package:calendar_of_events/models/event_data_source.dart';
 import 'package:calendar_of_events/pages/event_viewing_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -9,14 +11,7 @@ class TasksWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (selectedEvents.isEmpty) {
-    //   return const Center(
-    //     child: Text(
-    //       'Events not found',
-    //       style: TextStyle(color: Colors.white, fontSize: 24),
-    //     ),
-    //   );
-    // }
+    final _bloc = context.read<CalendarBloc>();
     return SfCalendarTheme(
       data: SfCalendarThemeData(
           timeTextStyle: const TextStyle(
@@ -27,20 +22,19 @@ class TasksWidget extends StatelessWidget {
         view: CalendarView.timelineDay,
         viewHeaderHeight: 50,
         cellBorderColor: Colors.black,
-        //dataSource: EventDataSource(provider.events),
-        //initialDisplayDate: ,
+        dataSource: EventDataSource(_bloc.state.events),
+        initialDisplayDate: _bloc.state.selectedDate,
         appointmentBuilder: appointmentBuilder,
         headerHeight: 0,
         todayHighlightColor: Colors.greenAccent,
         selectionDecoration: BoxDecoration(
           color: Colors.black.withOpacity(0.3),
         ),
-        // onTap: (details) {
-        //   if (details.appointments == null) return;
-        //   final event = details.appointments!.first;
-        //   Navigator.of(context).push(MaterialPageRoute(
-        //       builder: (context) => EventViewingPage(event: event)));
-        // },
+        onTap: (details) {
+          final event = details.appointments!.first;
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EventViewingPage(event: event)));
+        },
       ),
     );
   }

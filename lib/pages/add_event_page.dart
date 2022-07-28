@@ -15,16 +15,24 @@ class AddEventPage extends StatelessWidget {
     return BlocBuilder<CalendarBloc, CalendarState>(
         bloc: context.read<CalendarBloc>(),
         builder: (context, state) {
+          String toDateStart = Utils.toDate(state.startEvent ?? DateTime.now());
+          String toTimeStart = Utils.toTime(state.startEvent ?? DateTime.now());
+          String toDateFinish = Utils.toDate(state.finishEvent ??
+              DateTime.now().add(const Duration(hours: 2)));
+          String toTimeFinish = Utils.toTime(state.finishEvent ??
+              DateTime.now().add(const Duration(hours: 2)));
           return Scaffold(
             appBar: AppBar(
                 backgroundColor: Colors.green.shade700,
                 leading: const CloseButton(),
                 actions: [
                   IconButton(
-                    onPressed: () =>
-                        context.read<CalendarBloc>().add(SaveFormEvent(
-                              titleController.text,
-                            )),
+                    onPressed: () {
+                      context.read<CalendarBloc>().add(SaveFormEvent(
+                            titleController.text,
+                          ));
+                      Navigator.of(context).pop();
+                    },
                     icon: const Icon(Icons.done),
                   ),
                 ]),
@@ -54,8 +62,7 @@ class AddEventPage extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: dropDownField(
-                                text: Utils.toDate(
-                                    state.startEvent ?? DateTime.now()),
+                                text: toDateStart,
                                 onClicked: () => context
                                     .read<CalendarBloc>()
                                     .add(PickStartTimeEvent(context,
@@ -64,8 +71,7 @@ class AddEventPage extends StatelessWidget {
                             ),
                             Expanded(
                               child: dropDownField(
-                                text: Utils.toTime(
-                                    state.startEvent ?? DateTime.now()),
+                                text: toTimeStart,
                                 onClicked: () => context
                                     .read<CalendarBloc>()
                                     .add(PickStartTimeEvent(context,
@@ -79,9 +85,7 @@ class AddEventPage extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: dropDownField(
-                                text: Utils.toDate(state.finishEvent ??
-                                    DateTime.now()
-                                        .add(const Duration(hours: 2))),
+                                text: toDateFinish,
                                 onClicked: () => context
                                     .read<CalendarBloc>()
                                     .add(PickFinishTimeEvent(context,
@@ -90,9 +94,7 @@ class AddEventPage extends StatelessWidget {
                             ),
                             Expanded(
                               child: dropDownField(
-                                text: Utils.toTime(state.finishEvent ??
-                                    DateTime.now()
-                                        .add(const Duration(hours: 2))),
+                                text: toTimeFinish,
                                 onClicked: () => context
                                     .read<CalendarBloc>()
                                     .add(PickFinishTimeEvent(context,

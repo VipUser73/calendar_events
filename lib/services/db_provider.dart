@@ -23,8 +23,8 @@ class DBProvider {
       await db.execute("CREATE TABLE LOGIN ("
           "id INTEGER PRIMARY KEY,"
           "title TEXT,"
-          "start BLOB,"
-          "finish BLOB"
+          "start TEXT,"
+          "finish TEXT"
           ")");
     });
   }
@@ -34,7 +34,7 @@ class DBProvider {
     var raw = await db.rawInsert(
         "INSERT INTO LOGIN(title, start, finish)"
         "VALUES(?, ?, ?)",
-        [event.title, event.start, event.finish]);
+        [event.title, event.start.toString(), event.finish.toString()]);
     return raw;
   }
 

@@ -7,23 +7,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   CalendarBloc(this._storageRepository)
       : super(LoadingCalendarState(
-            events: _storageRepository.eventsFromDB,
             startEvent: _storageRepository.startEvent,
             finishEvent: _storageRepository.finishEvent)) {
     on<LoadingCalendarEvent>(_loadingCalendarList);
     on<PickStartTimeEvent>(_pickStartTimeEvent);
     on<PickFinishTimeEvent>(_pickFinishTimeEvent);
+    on<ShowTasksEvent>(_showTasksEvent);
     on<SaveFormEvent>(_saveFormEvent);
   }
   final LocalRepository _storageRepository;
+  List<Event> eventsFromDB = [];
 
   void _loadingCalendarList(
       LoadingCalendarEvent event, Emitter<CalendarState> emit) async {
-    List<Event> eventsFromDB = await _storageRepository.getEventsList();
-    emit(LoadedCalendarState(
-        events: eventsFromDB,
-        startEvent: _storageRepository.startEvent,
-        finishEvent: _storageRepository.finishEvent));
+    eventsFromDB = await _storageRepository.getEventsList();
+    emit(LoadedCalendarState(events: eventsFromDB));
   }
 
   void _pickStartTimeEvent(
@@ -44,7 +42,13 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
 
   void _saveFormEvent(SaveFormEvent event, Emitter<CalendarState> emit) async {
     await _storageRepository.saveForm(event.text);
-    emit(PickLoadedState(startEvent: _storageRepository.startEvent));
+    emit(PickLoadedState());
+  }
+
+  void _showTasksEvent(
+      ShowTasksEvent event, Emitter<CalendarState> emit) async {
+    emit(
+        ShowTasksState(selectedDate: event.selectedDate, events: eventsFromDB));
   }
 
   // void _deleteEvent(DeleteCalendarEvent event, Emitter<CalendarState> emit) async {

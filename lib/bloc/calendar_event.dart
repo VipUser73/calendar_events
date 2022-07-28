@@ -20,3 +20,8 @@ class SaveFormEvent extends CalendarEvent {
   final String text;
   SaveFormEvent(this.text);
 }
+
+class ShowTasksEvent extends CalendarEvent {
+  final DateTime selectedDate;
+  ShowTasksEvent(this.selectedDate);
+}
