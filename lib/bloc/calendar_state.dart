@@ -12,11 +12,7 @@ abstract class CalendarState {
       this.selectedDate});
 }
 
-class LoadingCalendarState extends CalendarState {
-  LoadingCalendarState(
-      {required DateTime? startEvent, required DateTime? finishEvent})
-      : super(startEvent: startEvent, finishEvent: finishEvent);
-}
+class LoadingCalendarState extends CalendarState {}
 
 class LoadedCalendarState extends CalendarState {
   LoadedCalendarState({required List<Event> events}) : super(events: events);
@@ -31,3 +27,5 @@ class ShowTasksState extends CalendarState {
   ShowTasksState({required List<Event> events, required DateTime? selectedDate})
       : super(events: events, selectedDate: selectedDate);
 }
+
+class AddEventState extends CalendarState {}

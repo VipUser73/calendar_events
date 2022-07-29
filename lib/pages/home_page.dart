@@ -13,8 +13,14 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CalendarBloc, CalendarState>(
+    return BlocConsumer<CalendarBloc, CalendarState>(
         bloc: context.read<CalendarBloc>()..add(LoadingCalendarEvent()),
+        listener: (context, state) {
+          if (state is AddEventState) {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => AddEventPage()));
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -47,8 +53,8 @@ class HomePage extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.add, color: Colors.white),
               backgroundColor: Colors.green.shade700,
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const AddEventPage())),
+              onPressed: () =>
+                  context.read<CalendarBloc>().add(AddEventEvent()),
             ),
           );
         });

@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddEventPage extends StatelessWidget {
-  const AddEventPage({Key? key}) : super(key: key);
+  final _formKey = GlobalKey<FormState>();
+  AddEventPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
     final titleController = TextEditingController();
     return BlocBuilder<CalendarBloc, CalendarState>(
         bloc: context.read<CalendarBloc>(),
@@ -27,12 +27,7 @@ class AddEventPage extends StatelessWidget {
                 leading: const CloseButton(),
                 actions: [
                   IconButton(
-                    onPressed: () {
-                      context.read<CalendarBloc>().add(SaveFormEvent(
-                            titleController.text,
-                          ));
-                      Navigator.of(context).pop();
-                    },
+                    onPressed: () => saveForm(context, titleController.text),
                     icon: const Icon(Icons.done),
                   ),
                 ]),
@@ -49,7 +44,8 @@ class AddEventPage extends StatelessWidget {
                         border: UnderlineInputBorder(),
                         hintText: 'Add title of the event',
                       ),
-                      //onFieldSubmitted: (_) => saveForm(),
+                      onFieldSubmitted: (_) =>
+                          saveForm(context, titleController.text),
                       validator: (title) => title != null && title.isEmpty
                           ? 'Title cannot be empty'
                           : null,
@@ -122,4 +118,14 @@ class AddEventPage extends StatelessWidget {
         trailing: const Icon(Icons.arrow_drop_down),
         onTap: onClicked,
       );
+
+  Future<void> saveForm(BuildContext context, String text) async {
+    final bool isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      context.read<CalendarBloc>().add(SaveFormEvent(
+            text,
+          ));
+      Navigator.of(context).pop();
+    }
+  }
 }

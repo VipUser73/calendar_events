@@ -75,12 +75,16 @@ class LocalRepository {
     }
   }
 
-  Future saveForm(String text) async {
+  Future<void> saveForm(String text) async {
     final event = Event(
       title: text,
       start: startEvent,
       finish: finishEvent,
     );
     _dbProvider.addEvent(event);
+  }
+
+  Future<void> deleteEvent(String _title) async {
+    await _dbProvider.deleteEvent(_title);
   }
 }

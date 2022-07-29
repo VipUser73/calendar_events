@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventEditingPage extends StatelessWidget {
-  const EventEditingPage({Key? key}) : super(key: key);
+  final _formKey = GlobalKey<FormState>();
+  EventEditingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
     final titleController = TextEditingController();
     return BlocBuilder<CalendarBloc, CalendarState>(
         bloc: context.read<CalendarBloc>(),
@@ -27,12 +27,7 @@ class EventEditingPage extends StatelessWidget {
                 leading: const CloseButton(),
                 actions: [
                   IconButton(
-                    onPressed: () {
-                      context.read<CalendarBloc>().add(SaveFormEvent(
-                            titleController.text,
-                          ));
-                      Navigator.of(context).pop();
-                    },
+                    onPressed: () => updateForm,
                     icon: const Icon(Icons.done),
                   ),
                 ]),
@@ -122,4 +117,14 @@ class EventEditingPage extends StatelessWidget {
         trailing: const Icon(Icons.arrow_drop_down),
         onTap: onClicked,
       );
+
+  Future<void> updateForm(BuildContext context, String text) async {
+    final bool isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      context.read<CalendarBloc>().add(SaveFormEvent(
+            text,
+          ));
+      Navigator.of(context).pop();
+    }
+  }
 }

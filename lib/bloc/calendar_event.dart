@@ -1,3 +1,4 @@
+import 'package:calendar_of_events/models/event_model.dart';
 import 'package:flutter/material.dart';
 
 abstract class CalendarEvent {}
@@ -24,4 +25,16 @@ class SaveFormEvent extends CalendarEvent {
 class ShowTasksEvent extends CalendarEvent {
   final DateTime selectedDate;
   ShowTasksEvent(this.selectedDate);
+}
+
+class AddEventEvent extends CalendarEvent {}
+
+class GoToViewingPageEvent extends CalendarEvent {
+  final dynamic event;
+  GoToViewingPageEvent(this.event);
+}
+
+class DeleteEventEvent extends CalendarEvent {
+  final String title;
+  DeleteEventEvent(this.title);
 }

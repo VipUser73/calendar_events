@@ -5,15 +5,15 @@ import 'package:calendar_of_events/repository/local_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
-  CalendarBloc(this._storageRepository)
-      : super(LoadingCalendarState(
-            startEvent: _storageRepository.startEvent,
-            finishEvent: _storageRepository.finishEvent)) {
+  CalendarBloc(this._storageRepository) : super(LoadingCalendarState()) {
     on<LoadingCalendarEvent>(_loadingCalendarList);
     on<PickStartTimeEvent>(_pickStartTimeEvent);
     on<PickFinishTimeEvent>(_pickFinishTimeEvent);
     on<ShowTasksEvent>(_showTasksEvent);
+    on<AddEventEvent>(_addEventEvent);
+    on<GoToViewingPageEvent>(_goToViewingPageEvent);
     on<SaveFormEvent>(_saveFormEvent);
+    on<DeleteEventEvent>(_deleteEvent);
   }
   final LocalRepository _storageRepository;
   List<Event> eventsFromDB = [];
@@ -40,9 +40,18 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
         startEvent: _storageRepository.startEvent, finishEvent: finishEvent));
   }
 
+  void _addEventEvent(AddEventEvent event, Emitter<CalendarState> emit) async {
+    emit(AddEventState());
+  }
+
   void _saveFormEvent(SaveFormEvent event, Emitter<CalendarState> emit) async {
     await _storageRepository.saveForm(event.text);
-    emit(PickLoadedState());
+    add(LoadingCalendarEvent());
+  }
+
+  void _deleteEvent(DeleteEventEvent event, Emitter<CalendarState> emit) async {
+    await _storageRepository.deleteEvent(event.title);
+    add(LoadingCalendarEvent());
   }
 
   void _showTasksEvent(
@@ -51,9 +60,9 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
         ShowTasksState(selectedDate: event.selectedDate, events: eventsFromDB));
   }
 
-  // void _deleteEvent(DeleteCalendarEvent event, Emitter<CalendarState> emit) async {
-  //   await _storageRepository.deleteEvent(event.cityName);
-  //   _updateCalendar();
-  // }
-
+  void _goToViewingPageEvent(
+      GoToViewingPageEvent event, Emitter<CalendarState> emit) async {
+    await _storageRepository.deleteEvent(event.event);
+    add(LoadingCalendarEvent());
+  }
 }

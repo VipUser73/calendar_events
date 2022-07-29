@@ -31,9 +31,11 @@ class TasksWidget extends StatelessWidget {
           color: Colors.black.withOpacity(0.3),
         ),
         onTap: (details) {
-          final event = details.appointments!.first;
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => EventViewingPage(event: event)));
+          final event = details.appointments?.first;
+          if (event != null) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => EventViewingPage(event: event)));
+          }
         },
       ),
     );

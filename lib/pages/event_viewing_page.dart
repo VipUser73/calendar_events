@@ -1,8 +1,13 @@
+import 'dart:math';
+
+import 'package:calendar_of_events/bloc/calendar_bloc.dart';
+import 'package:calendar_of_events/bloc/calendar_event.dart';
 import 'package:calendar_of_events/models/event_model.dart';
 import 'package:calendar_of_events/models/utils.dart';
 import 'package:calendar_of_events/pages/event_editing_page.dart';
+import 'package:calendar_of_events/pages/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventViewingPage extends StatelessWidget {
   final Event event;
@@ -14,6 +19,7 @@ class EventViewingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green.shade700,
         leading: const CloseButton(),
         actions: buildViewingActions(context, event),
       ),
@@ -40,15 +46,15 @@ class EventViewingPage extends StatelessWidget {
       ));
 
   List<Widget> buildViewingActions(BuildContext context, Event event) => [
-        IconButton(
-          icon: const Icon(Icons.edit),
-          onPressed: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => EventEditingPage())),
-        ),
+        IconButton(icon: const Icon(Icons.edit), onPressed: () {}),
         IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              Navigator.of(context).pop();
+              context.read<CalendarBloc>().add(DeleteEventEvent(
+                    event.title,
+                  ));
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => HomePage()));
             }),
       ];
 }
