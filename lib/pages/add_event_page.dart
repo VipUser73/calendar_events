@@ -24,7 +24,12 @@ class AddEventPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
                 backgroundColor: Colors.green.shade700,
-                leading: const CloseButton(),
+                leading: CloseButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    context.read<CalendarBloc>().add(LoadingCalendarEvent());
+                  },
+                ),
                 actions: [
                   IconButton(
                     onPressed: () => saveForm(context, titleController.text),

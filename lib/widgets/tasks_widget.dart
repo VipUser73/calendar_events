@@ -1,5 +1,7 @@
 import 'package:calendar_of_events/bloc/calendar_bloc.dart';
+import 'package:calendar_of_events/bloc/calendar_event.dart';
 import 'package:calendar_of_events/models/event_data_source.dart';
+import 'package:calendar_of_events/models/event_model.dart';
 import 'package:calendar_of_events/pages/event_viewing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +25,7 @@ class TasksWidget extends StatelessWidget {
         viewHeaderHeight: 50,
         cellBorderColor: Colors.black,
         dataSource: EventDataSource(_bloc.state.events),
-        initialDisplayDate: _bloc.state.selectedDate,
+        initialDisplayDate: _bloc.state.startEvent,
         appointmentBuilder: appointmentBuilder,
         headerHeight: 0,
         todayHighlightColor: Colors.greenAccent,
@@ -31,10 +33,11 @@ class TasksWidget extends StatelessWidget {
           color: Colors.black.withOpacity(0.3),
         ),
         onTap: (details) {
-          final event = details.appointments?.first;
-          if (event != null) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => EventViewingPage(event: event)));
+          final Event? selectedEvent = details.appointments?.first;
+          if (selectedEvent != null) {
+            context
+                .read<CalendarBloc>()
+                .add(GoToViewingPageEvent(selectedEvent));
           }
         },
       ),
@@ -45,7 +48,7 @@ class TasksWidget extends StatelessWidget {
     BuildContext context,
     CalendarAppointmentDetails details,
   ) {
-    final event = details.appointments.first;
+    final Event selectedEvent = details.appointments.first;
     return Container(
       width: details.bounds.width,
       height: details.bounds.height,
@@ -55,7 +58,7 @@ class TasksWidget extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          event.title,
+          selectedEvent.title,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(

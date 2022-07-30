@@ -30,8 +30,13 @@ class ShowTasksEvent extends CalendarEvent {
 class AddEventEvent extends CalendarEvent {}
 
 class GoToViewingPageEvent extends CalendarEvent {
-  final dynamic event;
-  GoToViewingPageEvent(this.event);
+  final Event selectedEvent;
+  GoToViewingPageEvent(this.selectedEvent);
+}
+
+class GoToEditingPageEvent extends CalendarEvent {
+  final Event selectedEvent;
+  GoToEditingPageEvent(this.selectedEvent);
 }
 
 class DeleteEventEvent extends CalendarEvent {

@@ -12,6 +12,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     on<ShowTasksEvent>(_showTasksEvent);
     on<AddEventEvent>(_addEventEvent);
     on<GoToViewingPageEvent>(_goToViewingPageEvent);
+    on<GoToEditingPageEvent>(_goToEditingPageEvent);
     on<SaveFormEvent>(_saveFormEvent);
     on<DeleteEventEvent>(_deleteEvent);
   }
@@ -62,7 +63,11 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
 
   void _goToViewingPageEvent(
       GoToViewingPageEvent event, Emitter<CalendarState> emit) async {
-    await _storageRepository.deleteEvent(event.event);
-    add(LoadingCalendarEvent());
+    emit(LoadedViewingPageState(selectedEvent: event.selectedEvent));
+  }
+
+  void _goToEditingPageEvent(
+      GoToEditingPageEvent event, Emitter<CalendarState> emit) async {
+    emit(LoadedEditingPageState(selectedEvent: event.selectedEvent));
   }
 }

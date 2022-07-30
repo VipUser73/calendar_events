@@ -11,16 +11,18 @@ class EventEditingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleController = TextEditingController();
     return BlocBuilder<CalendarBloc, CalendarState>(
         bloc: context.read<CalendarBloc>(),
         builder: (context, state) {
-          String toDateStart = Utils.toDate(state.startEvent ?? DateTime.now());
-          String toTimeStart = Utils.toTime(state.startEvent ?? DateTime.now());
-          String toDateFinish = Utils.toDate(state.finishEvent ??
+          String toDateStart =
+              Utils.toDate(state.selectedEvent?.start ?? DateTime.now());
+          String toTimeStart =
+              Utils.toTime(state.selectedEvent?.start ?? DateTime.now());
+          String toDateFinish = Utils.toDate(state.selectedEvent?.finish ??
               DateTime.now().add(const Duration(hours: 2)));
-          String toTimeFinish = Utils.toTime(state.finishEvent ??
+          String toTimeFinish = Utils.toTime(state.selectedEvent?.finish ??
               DateTime.now().add(const Duration(hours: 2)));
+          print(state.selectedEvent!.title);
           return Scaffold(
             appBar: AppBar(
                 backgroundColor: Colors.green.shade700,
@@ -48,7 +50,8 @@ class EventEditingPage extends StatelessWidget {
                       validator: (title) => title != null && title.isEmpty
                           ? 'Title cannot be empty'
                           : null,
-                      controller: titleController,
+                      controller: TextEditingController(
+                          text: state.selectedEvent!.title),
                     ),
                     Column(
                       children: [

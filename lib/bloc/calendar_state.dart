@@ -2,11 +2,13 @@ import 'package:calendar_of_events/models/event_model.dart';
 
 abstract class CalendarState {
   List<Event> events;
+  final Event? selectedEvent;
   final DateTime? selectedDate;
   final DateTime? startEvent;
   final DateTime? finishEvent;
   CalendarState(
       {this.events = const [],
+      this.selectedEvent,
       this.startEvent,
       this.finishEvent,
       this.selectedDate});
@@ -29,3 +31,13 @@ class ShowTasksState extends CalendarState {
 }
 
 class AddEventState extends CalendarState {}
+
+class LoadedEditingPageState extends CalendarState {
+  LoadedEditingPageState({required Event selectedEvent})
+      : super(selectedEvent: selectedEvent);
+}
+
+class LoadedViewingPageState extends CalendarState {
+  LoadedViewingPageState({required Event selectedEvent})
+      : super(selectedEvent: selectedEvent);
+}

@@ -3,6 +3,7 @@ import 'package:calendar_of_events/bloc/calendar_event.dart';
 import 'package:calendar_of_events/bloc/calendar_state.dart';
 import 'package:calendar_of_events/models/event_data_source.dart';
 import 'package:calendar_of_events/pages/add_event_page.dart';
+import 'package:calendar_of_events/pages/event_viewing_page.dart';
 import 'package:calendar_of_events/widgets/tasks_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,10 @@ class HomePage extends StatelessWidget {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => AddEventPage()));
           }
+          if (state is LoadedViewingPageState) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const EventViewingPage()));
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -29,25 +34,28 @@ class HomePage extends StatelessWidget {
               title: const Text('Сalendar of events'),
             ),
             body: SafeArea(
-              child: SfCalendar(
-                headerHeight: 50,
-                view: CalendarView.month,
-                firstDayOfWeek: 1,
-                selectionDecoration:
-                    BoxDecoration(border: Border.all(color: Colors.white)),
-                cellBorderColor: Colors.black,
-                todayHighlightColor: Colors.green,
-                dataSource: EventDataSource(state.events),
-                initialDisplayDate: DateTime.now(),
-                onLongPress: (details) {
-                  context
-                      .read<CalendarBloc>()
-                      .add(ShowTasksEvent(details.date!));
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => const TasksWidget(),
-                  );
-                },
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 90),
+                child: SfCalendar(
+                  headerHeight: 50,
+                  view: CalendarView.month,
+                  firstDayOfWeek: 1,
+                  selectionDecoration:
+                      BoxDecoration(border: Border.all(color: Colors.white)),
+                  cellBorderColor: Colors.black,
+                  todayHighlightColor: Colors.green,
+                  dataSource: EventDataSource(state.events),
+                  initialDisplayDate: DateTime.now(),
+                  onLongPress: (details) {
+                    context
+                        .read<CalendarBloc>()
+                        .add(ShowTasksEvent(details.date!));
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => const TasksWidget(),
+                    );
+                  },
+                ),
               ),
             ),
             floatingActionButton: FloatingActionButton(
