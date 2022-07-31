@@ -7,17 +7,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   CalendarBloc(this._storageRepository) : super(LoadingCalendarState()) {
     on<LoadingCalendarEvent>(_loadingCalendarList);
-    on<PickStartTimeEvent>(_pickStartTimeEvent);
-    on<PickFinishTimeEvent>(_pickFinishTimeEvent);
-    on<ShowTasksEvent>(_showTasksEvent);
+    on<PickTimeEvent>(_pickTimeEvent);
+    on<PickTimeEditEvent>(_pickTimeEditEvent);
     on<AddEventEvent>(_addEventEvent);
     on<GoToViewingPageEvent>(_goToViewingPageEvent);
+    on<GoToBackEvent>(_goToBackEvent);
     on<GoToEditingPageEvent>(_goToEditingPageEvent);
     on<SaveFormEvent>(_saveFormEvent);
+    on<UpdateFormEvent>(_updateFormEvent);
     on<DeleteEventEvent>(_deleteEvent);
   }
   final LocalRepository _storageRepository;
   List<Event> eventsFromDB = [];
+  Event selectedEvent = Event(
+      title: '',
+      start: DateTime.now(),
+      finish: DateTime.now().add(const Duration(hours: 2)));
+  String name = '';
 
   void _loadingCalendarList(
       LoadingCalendarEvent event, Emitter<CalendarState> emit) async {
@@ -25,20 +31,14 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     emit(LoadedCalendarState(events: eventsFromDB));
   }
 
-  void _pickStartTimeEvent(
-      PickStartTimeEvent event, Emitter<CalendarState> emit) async {
-    DateTime? startEvent = await _storageRepository
-        .pickstartEventTime(event.context, pickDate: event.pickDate);
+  void _pickTimeEvent(PickTimeEvent event, Emitter<CalendarState> emit) async {
     emit(PickLoadedState(
-        startEvent: startEvent, finishEvent: _storageRepository.finishEvent));
+        startEvent: event.startEvent, finishEvent: event.finishEvent));
   }
 
-  void _pickFinishTimeEvent(
-      PickFinishTimeEvent event, Emitter<CalendarState> emit) async {
-    DateTime? finishEvent = await _storageRepository
-        .pickfinishEventTime(event.context, pickDate: event.pickDate);
-    emit(PickLoadedState(
-        startEvent: _storageRepository.startEvent, finishEvent: finishEvent));
+  void _pickTimeEditEvent(
+      PickTimeEditEvent event, Emitter<CalendarState> emit) async {
+    emit(PickLoadedEditState(selectedEvent: event.selectedEvent));
   }
 
   void _addEventEvent(AddEventEvent event, Emitter<CalendarState> emit) async {
@@ -46,8 +46,13 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   }
 
   void _saveFormEvent(SaveFormEvent event, Emitter<CalendarState> emit) async {
-    await _storageRepository.saveForm(event.text);
+    await _storageRepository.saveForm(event.saveEvent);
     add(LoadingCalendarEvent());
+  }
+
+  void _updateFormEvent(
+      UpdateFormEvent event, Emitter<CalendarState> emit) async {
+    await _storageRepository.updateForm(event.updateEvent, name);
   }
 
   void _deleteEvent(DeleteEventEvent event, Emitter<CalendarState> emit) async {
@@ -55,19 +60,19 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     add(LoadingCalendarEvent());
   }
 
-  void _showTasksEvent(
-      ShowTasksEvent event, Emitter<CalendarState> emit) async {
-    emit(
-        ShowTasksState(selectedDate: event.selectedDate, events: eventsFromDB));
-  }
-
   void _goToViewingPageEvent(
       GoToViewingPageEvent event, Emitter<CalendarState> emit) async {
-    emit(LoadedViewingPageState(selectedEvent: event.selectedEvent));
+    selectedEvent = event.selectedEvent;
+    emit(LoadedViewingPageState(selectedEvent: selectedEvent));
+  }
+
+  void _goToBackEvent(GoToBackEvent event, Emitter<CalendarState> emit) async {
+    emit(LoadedViewingPageState(selectedEvent: selectedEvent));
   }
 
   void _goToEditingPageEvent(
       GoToEditingPageEvent event, Emitter<CalendarState> emit) async {
-    emit(LoadedEditingPageState(selectedEvent: event.selectedEvent));
+    name = event.name;
+    emit(LoadedEditingPageState(selectedEvent: selectedEvent, name: name));
   }
 }

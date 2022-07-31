@@ -28,12 +28,11 @@ class EventViewingPage extends StatelessWidget {
                 backgroundColor: Colors.green.shade700,
                 leading: CloseButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
                     context.read<CalendarBloc>().add(LoadingCalendarEvent());
+                    Navigator.of(context).pop();
                   },
                 ),
-                actions:
-                    buildViewingActions(context, state.selectedEvent!, state),
+                actions: buildViewingActions(context, state.selectedEvent!),
               ),
               body: ListView(
                 padding: const EdgeInsets.all(30),
@@ -66,15 +65,13 @@ class EventViewingPage extends StatelessWidget {
         });
   }
 
-  List<Widget> buildViewingActions(
-          BuildContext context, Event event, CalendarState state) =>
-      [
+  List<Widget> buildViewingActions(BuildContext context, Event event) => [
         IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
               context
                   .read<CalendarBloc>()
-                  .add(GoToEditingPageEvent(state.selectedEvent!));
+                  .add(GoToEditingPageEvent(event.title));
             }),
         IconButton(
             icon: const Icon(Icons.delete),

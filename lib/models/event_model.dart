@@ -1,7 +1,7 @@
 class Event {
-  final String title;
-  final DateTime start;
-  final DateTime finish;
+  String title;
+  DateTime start;
+  DateTime finish;
 
   Event({
     required this.title,

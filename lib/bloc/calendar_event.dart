@@ -1,25 +1,23 @@
 import 'package:calendar_of_events/models/event_model.dart';
-import 'package:flutter/material.dart';
 
 abstract class CalendarEvent {}
 
 class LoadingCalendarEvent extends CalendarEvent {}
 
-class PickStartTimeEvent extends CalendarEvent {
-  BuildContext context;
-  bool pickDate;
-  PickStartTimeEvent(this.context, {required this.pickDate});
+class PickTimeEvent extends CalendarEvent {
+  DateTime startEvent;
+  DateTime finishEvent;
+  PickTimeEvent(this.startEvent, this.finishEvent);
 }
 
-class PickFinishTimeEvent extends CalendarEvent {
-  BuildContext context;
-  bool pickDate;
-  PickFinishTimeEvent(this.context, {required this.pickDate});
+class PickTimeEditEvent extends CalendarEvent {
+  final Event selectedEvent;
+  PickTimeEditEvent(this.selectedEvent);
 }
 
 class SaveFormEvent extends CalendarEvent {
-  final String text;
-  SaveFormEvent(this.text);
+  final Event saveEvent;
+  SaveFormEvent(this.saveEvent);
 }
 
 class ShowTasksEvent extends CalendarEvent {
@@ -35,8 +33,15 @@ class GoToViewingPageEvent extends CalendarEvent {
 }
 
 class GoToEditingPageEvent extends CalendarEvent {
-  final Event selectedEvent;
-  GoToEditingPageEvent(this.selectedEvent);
+  final String name;
+  GoToEditingPageEvent(this.name);
+}
+
+class GoToBackEvent extends CalendarEvent {}
+
+class UpdateFormEvent extends CalendarEvent {
+  final Event updateEvent;
+  UpdateFormEvent(this.updateEvent);
 }
 
 class DeleteEventEvent extends CalendarEvent {

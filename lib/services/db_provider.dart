@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:calendar_of_events/models/event_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DBProvider {
@@ -43,6 +42,14 @@ class DBProvider {
     var res = await db.query("LOGIN");
     eventsFromDB = res.map((e) => Event.fromDB(e)).toList();
     return eventsFromDB;
+  }
+
+  updateForm(Event event, String name) async {
+    final db = await database;
+    var raw = await db.rawUpdate(
+        "UPDATE LOGIN SET title = ?, start = ?, finish = ? WHERE title = ?",
+        [event.title, event.start.toString(), event.finish.toString(), name]);
+    return raw;
   }
 
   deleteEvent(String _title) async {

@@ -46,13 +46,10 @@ class HomePage extends StatelessWidget {
                   todayHighlightColor: Colors.green,
                   dataSource: EventDataSource(state.events),
                   initialDisplayDate: DateTime.now(),
-                  onLongPress: (details) {
-                    context
-                        .read<CalendarBloc>()
-                        .add(ShowTasksEvent(details.date!));
+                  onLongPress: (CalendarLongPressDetails details) {
                     showModalBottomSheet(
                       context: context,
-                      builder: (context) => const TasksWidget(),
+                      builder: (context) => TasksWidget(details.date!),
                     );
                   },
                 ),

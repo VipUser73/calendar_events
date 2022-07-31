@@ -1,15 +1,15 @@
-import 'package:calendar_of_events/bloc/calendar_bloc.dart';
-import 'package:calendar_of_events/bloc/calendar_event.dart';
-import 'package:calendar_of_events/models/event_data_source.dart';
-import 'package:calendar_of_events/models/event_model.dart';
-import 'package:calendar_of_events/pages/event_viewing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:calendar_of_events/bloc/calendar_bloc.dart';
+import 'package:calendar_of_events/bloc/calendar_event.dart';
+import 'package:calendar_of_events/models/event_data_source.dart';
+import 'package:calendar_of_events/models/event_model.dart';
 
 class TasksWidget extends StatelessWidget {
-  const TasksWidget({Key? key}) : super(key: key);
+  final DateTime selectedDate;
+  const TasksWidget(this.selectedDate, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +21,11 @@ class TasksWidget extends StatelessWidget {
         color: Colors.white,
       )),
       child: SfCalendar(
-        view: CalendarView.timelineDay,
+        view: CalendarView.day,
         viewHeaderHeight: 50,
         cellBorderColor: Colors.black,
         dataSource: EventDataSource(_bloc.state.events),
-        initialDisplayDate: _bloc.state.startEvent,
+        initialDisplayDate: selectedDate,
         appointmentBuilder: appointmentBuilder,
         headerHeight: 0,
         todayHighlightColor: Colors.greenAccent,
@@ -33,6 +33,7 @@ class TasksWidget extends StatelessWidget {
           color: Colors.black.withOpacity(0.3),
         ),
         onTap: (details) {
+          //print(_bloc.state.events.indexOf(details.appointments![0]));
           final Event? selectedEvent = details.appointments?.first;
           if (selectedEvent != null) {
             context
