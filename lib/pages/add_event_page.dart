@@ -1,199 +1,146 @@
-import 'package:calendar_of_events/bloc/calendar_bloc.dart';
-import 'package:calendar_of_events/bloc/calendar_event.dart';
-import 'package:calendar_of_events/bloc/calendar_state.dart';
+import 'dart:async';
+import 'package:calendar_of_events/controllers/add_event_controller.dart';
 import 'package:calendar_of_events/models/event_model.dart';
 import 'package:calendar_of_events/models/utils.dart';
+import 'package:calendar_of_events/text_resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:time_range/time_range.dart';
 
 class AddEventPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final AddEventController addEventController = Get.put(AddEventController());
+
   AddEventPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final titleController = TextEditingController();
-    return BlocBuilder<CalendarBloc, CalendarState>(
-        bloc: context.read<CalendarBloc>(),
-        builder: (context, state) {
-          DateTime startEvent = state.startEvent ?? DateTime.now();
-          DateTime finishEvent =
-              state.finishEvent ?? DateTime.now().add(const Duration(hours: 2));
-          return Scaffold(
-            appBar: AppBar(
-                backgroundColor: Colors.green.shade700,
-                leading: CloseButton(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+          appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: Colors.green.shade700,
+              title: Text(appBarTitle.keys.first.tr),
+              leading: CloseButton(
+                onPressed: () => Get.back(),
+              ),
+              actions: [
+                IconButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    context.read<CalendarBloc>().add(LoadingCalendarEvent());
+                    FocusScope.of(context).unfocus();
+                    saveForm();
                   },
+                  icon: const Icon(Icons.done),
                 ),
-                actions: [
-                  IconButton(
-                    onPressed: () => saveForm(
-                        context, startEvent, finishEvent, titleController.text),
-                    icon: const Icon(Icons.done),
-                  ),
-                ]),
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      style: const TextStyle(fontSize: 20),
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        hintText: 'Add title of the event',
+              ]),
+          body: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 300,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 50),
+                      Form(
+                        key: _formKey,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          child: TextFormField(
+                            cursorColor: Colors.green,
+                            decoration: InputDecoration(
+                              labelText: addEventHintText.keys.first.tr,
+                              labelStyle: const TextStyle(color: Colors.white),
+                              focusedBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.green, width: 2),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              enabledBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.black, width: 2),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              errorBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.black, width: 2),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              focusedErrorBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.black, width: 2),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                            ),
+                            onFieldSubmitted: (_) =>
+                                FocusScope.of(context).unfocus(),
+                            validator: (title) => title != null && title.isEmpty
+                                ? 'Title cannot be empty'
+                                : null,
+                            controller: _titleController,
+                          ),
+                        ),
                       ),
-                      onFieldSubmitted: (_) => saveForm(context, startEvent,
-                          finishEvent, titleController.text),
-                      validator: (title) => title != null && title.isEmpty
-                          ? 'Title cannot be empty'
-                          : null,
-                      controller: titleController,
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: dropDownField(
-                                text: Utils.toDate(startEvent),
-                                onClicked: () => pickstartEventTime(
-                                    context, startEvent, finishEvent,
-                                    pickDate: true),
-                              ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () => pickEventDate(context),
+                        child: SizedBox(
+                          width: 160,
+                          height: 50,
+                          child: Card(
+                              child: Center(
+                                  child: Obx(
+                            () => Text(
+                              Utils.toDate(
+                                  addEventController.selectedDate.value),
+                              maxLines: 1,
+                              style: TextStyle(fontSize: 18),
                             ),
-                            Expanded(
-                              child: dropDownField(
-                                text: Utils.toTime(startEvent),
-                                onClicked: () => pickstartEventTime(
-                                    context, startEvent, finishEvent,
-                                    pickDate: false),
-                              ),
-                            )
-                          ],
+                          ))),
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: dropDownField(
-                                text: Utils.toDate(finishEvent),
-                                onClicked: () => pickfinishEventTime(
-                                    context, startEvent, finishEvent,
-                                    pickDate: true),
-                              ),
-                            ),
-                            Expanded(
-                              child: dropDownField(
-                                text: Utils.toTime(finishEvent),
-                                onClicked: () => pickfinishEventTime(
-                                    context, startEvent, finishEvent,
-                                    pickDate: false),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        });
-  }
-
-  Widget dropDownField({
-    required String text,
-    required VoidCallback onClicked,
-  }) =>
-      ListTile(
-        title: Text(text),
-        trailing: const Icon(Icons.arrow_drop_down),
-        onTap: onClicked,
-      );
-
-  Future<void> pickstartEventTime(
-      BuildContext context, DateTime startEvent, DateTime finishEvent,
-      {required bool pickDate}) async {
-    final date = await pickDateTime(context, startEvent, pickDate: pickDate);
-    if (date != null) {
-      if (date.isAfter(finishEvent)) {
-        finishEvent = DateTime(
-          date.year,
-          date.month,
-          date.day,
-          finishEvent.hour,
-          finishEvent.minute,
-        );
-      }
-      startEvent = date;
-      context.read<CalendarBloc>().add(PickTimeEvent(startEvent, finishEvent));
-    }
-  }
-
-  Future<void> pickfinishEventTime(
-      BuildContext context, DateTime startEvent, DateTime finishEvent,
-      {required bool pickDate}) async {
-    final date = await pickDateTime(
-      context,
-      finishEvent,
-      pickDate: pickDate,
-      firstDate: pickDate ? startEvent : null,
+              SliverToBoxAdapter(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: 300,
+                  ),
+                  child: DecoratedBox(
+                    decoration: new BoxDecoration(color: Colors.black38),
+                  ),
+                ),
+              )
+            ],
+          )),
     );
-    finishEvent = date ?? finishEvent;
-    context.read<CalendarBloc>().add(PickTimeEvent(startEvent, finishEvent));
   }
 
-  Future<DateTime?> pickDateTime(BuildContext context, DateTime initialDate,
-      {required bool pickDate, DateTime? firstDate}) async {
-    if (pickDate) {
-      final date = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: firstDate ?? DateTime(2022, 1),
-        lastDate: DateTime(2100),
-      );
-      if (date == null) {
-        return null;
-      } else {
-        final Duration time =
-            Duration(hours: initialDate.hour, minutes: initialDate.minute);
-        return date.add(time);
-      }
-    } else {
-      final timeOfDay = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(initialDate),
-      );
-      if (timeOfDay == null) {
-        return null;
-      } else {
-        final date =
-            DateTime(initialDate.year, initialDate.month, initialDate.day);
-        final time = Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute);
-        return date.add(time);
-      }
+  Future<void> pickEventDate(BuildContext context) async {
+    final data = await showDatePicker(
+      context: context,
+      initialDate: addEventController.selectedDate.value,
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2033),
+    );
+    if (data != null && data != addEventController.selectedDate.value) {
+      addEventController.selectedDate.value = data;
     }
   }
 
-  Future<void> saveForm(BuildContext context, DateTime startEvent,
-      DateTime finishEvent, String text) async {
+  Future<void> saveForm() async {
     final bool isValid = _formKey.currentState!.validate();
     if (isValid) {
-      final saveEvent = Event(
-        title: text,
-        start: startEvent,
-        finish: finishEvent,
-      );
-      context.read<CalendarBloc>().add(SaveFormEvent(saveEvent));
-      Navigator.of(context).pop();
+      final event = Event(
+          title: _titleController.text,
+          dayMonth: addEventController.selectedDate.value);
+      addEventController.addEvent(event);
+      Get.back();
     }
   }
 }

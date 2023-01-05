@@ -6,7 +6,6 @@ import 'package:path/path.dart';
 
 class DBProvider {
   Database? _database;
-  List<Event> eventsFromDB = [];
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -22,6 +21,7 @@ class DBProvider {
       await db.execute("CREATE TABLE LOGIN ("
           "id INTEGER PRIMARY KEY,"
           "title TEXT,"
+          "data TEXT,"
           "start TEXT,"
           "finish TEXT"
           ")");
@@ -31,24 +31,34 @@ class DBProvider {
   addEvent(Event event) async {
     final db = await database;
     var raw = await db.rawInsert(
-        "INSERT INTO LOGIN(title, start, finish)"
-        "VALUES(?, ?, ?)",
-        [event.title, event.start.toString(), event.finish.toString()]);
+        "INSERT INTO LOGIN(title, data, start, finish)"
+        "VALUES(?, ?, ?, ?)",
+        [
+          event.title,
+          event.dayMonth.toString(),
+          event.startTime?.toString() ?? '',
+          event.finishTime?.toString() ?? ''
+        ]);
     return raw;
   }
 
   Future<List<Event>> getEvents() async {
     final db = await database;
     var res = await db.query("LOGIN");
-    eventsFromDB = res.map((e) => Event.fromDB(e)).toList();
-    return eventsFromDB;
+    return res.map((e) => Event.fromDB(e)).toList();
   }
 
   updateForm(Event event, String name) async {
     final db = await database;
     var raw = await db.rawUpdate(
-        "UPDATE LOGIN SET title = ?, start = ?, finish = ? WHERE title = ?",
-        [event.title, event.start.toString(), event.finish.toString(), name]);
+        "UPDATE LOGIN SET title = ?, data = ?, start = ?, finish = ? WHERE title = ?",
+        [
+          event.title,
+          event.dayMonth.toString(),
+          event.startTime.toString(),
+          event.finishTime.toString(),
+          name
+        ]);
     return raw;
   }
 
