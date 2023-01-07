@@ -11,11 +11,10 @@ class CalendarWeekController extends GetxController with StateMixin {
 
   @override
   void onInit() {
+    print('CalendarWeekController.onInit');
     super.onInit();
 
     dbProvider.getEvents().then((response) {
-      print(response.first.dayMonth);
-      print(firstDayOfWeek);
       eventsFromDB.value = response;
       update();
       change(response, status: RxStatus.success());
