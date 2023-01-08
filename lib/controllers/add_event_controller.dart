@@ -43,8 +43,12 @@ class AddEventController extends GetxController {
   Future<void> saveForm() async {
     final bool isValid = formKey.currentState!.validate();
     if (isValid) {
-      final event =
-          Event(title: titleController.text, dayMonth: selectedDate.value);
+      final event = Event(
+        title: titleController.text,
+        dayMonth: selectedDate.value,
+        startTime: flag.value ? selectedStartTime.value : null,
+        finishTime: flag.value ? selectedFinishTime.value : null,
+      );
       addEvent(event);
       Get.back();
     }
@@ -52,6 +56,11 @@ class AddEventController extends GetxController {
 
   void addEvent(Event event) async {
     await dbProvider.addEvent(event);
+    calendarWeekController.onInit();
+  }
+
+  void deleteEvent(String titleEvent) async {
+    await dbProvider.deleteEvent(titleEvent);
     calendarWeekController.onInit();
   }
 }

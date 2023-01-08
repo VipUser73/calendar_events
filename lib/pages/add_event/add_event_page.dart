@@ -18,39 +18,52 @@ class AddEventPage extends StatelessWidget {
           body: CustomScrollView(slivers: [
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 400,
+                //height: 400,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 60, left: 10, right: 16),
+                          const EdgeInsets.only(top: 40, left: 10, right: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
                               onPressed: () => Get.back(),
-                              icon: Icon(Icons.close)),
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              )),
                           IconButton(
                               onPressed: () => addEventController.saveForm(),
-                              icon: Icon(Icons.check)),
+                              icon: const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              )),
                         ],
                       ),
                     ),
                     TextFieldWidget(),
                     DateTimeWidget(isData: true),
-                    Obx(() => Switch(
-                        value: addEventController.flag.value,
-                        onChanged: (_) => addEventController.flag.toggle())),
+                    Obx(() => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Switch(
+                              value: addEventController.flag.value,
+                              onChanged: (_) =>
+                                  addEventController.flag.toggle()),
+                        )),
                     Obx(() => Visibility(
                           visible: addEventController.flag.value,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              DateTimeWidget(isStartTime: true),
-                              const SizedBox(width: 10),
-                              DateTimeWidget(),
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                DateTimeWidget(isStartTime: true),
+                                const SizedBox(width: 10),
+                                DateTimeWidget(),
+                              ],
+                            ),
                           ),
                         ))
                   ],

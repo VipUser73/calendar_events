@@ -18,18 +18,19 @@ class DateTimeWidget extends StatelessWidget {
         width: isData ? 170 : 80,
         height: 60,
         child: Card(
+            color: Colors.grey.shade700,
             child: Center(
                 child: Obx(
-          () => Text(
-            isData
-                ? Utils.toDate(addEventController.selectedDate.value)
-                : Utils.toTime(isStartTime
-                    ? addEventController.selectedStartTime.value
-                    : addEventController.selectedFinishTime.value),
-            maxLines: 1,
-            style: const TextStyle(fontSize: 18),
-          ),
-        ))),
+              () => Text(
+                isData
+                    ? Utils.toDate(addEventController.selectedDate.value)
+                    : Utils.toTime(isStartTime
+                        ? addEventController.selectedStartTime.value
+                        : addEventController.selectedFinishTime.value),
+                maxLines: 1,
+                style: const TextStyle(fontSize: 18),
+              ),
+            ))),
       ),
     );
   }

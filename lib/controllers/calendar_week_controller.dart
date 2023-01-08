@@ -1,5 +1,6 @@
 import 'package:calendar_of_events/models/event_model.dart';
 import 'package:calendar_of_events/services/db_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CalendarWeekController extends GetxController with StateMixin {
@@ -11,7 +12,7 @@ class CalendarWeekController extends GetxController with StateMixin {
 
   @override
   void onInit() {
-    print('CalendarWeekController.onInit');
+    debugPrint('CalendarWeekController.onInit');
     super.onInit();
 
     dbProvider.getEvents().then((response) {
