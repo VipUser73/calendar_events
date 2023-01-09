@@ -50,7 +50,6 @@ class AddEventController extends GetxController {
         finishTime: flag.value ? selectedFinishTime.value : null,
       );
       addEvent(event);
-      Get.back();
     }
   }
 

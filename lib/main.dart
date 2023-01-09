@@ -1,3 +1,4 @@
+import 'package:calendar_of_events/pages/view_month/view_month_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:calendar_of_events/pages/add_event/add_event_page.dart';
 import 'package:calendar_of_events/pages/view_week/view_week_page.dart';
@@ -39,6 +40,7 @@ class CalendarApp extends StatelessWidget {
       //theme: ThemeData.dark(),
       getPages: [
         GetPage(name: '/', page: () => ViewWeekPage()),
+        GetPage(name: '/view_month', page: () => ViewMonthPage()),
         GetPage(name: '/add_event', page: () => AddEventPage()),
       ],
     );

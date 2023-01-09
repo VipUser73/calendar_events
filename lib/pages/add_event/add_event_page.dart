@@ -35,7 +35,12 @@ class AddEventPage extends StatelessWidget {
                                 color: Colors.white,
                               )),
                           IconButton(
-                              onPressed: () => addEventController.saveForm(),
+                              onPressed: () {
+                                addEventController
+                                  ..saveForm()
+                                  ..titleController.clear();
+                                FocusScope.of(context).unfocus();
+                              },
                               icon: const Icon(
                                 Icons.check,
                                 color: Colors.white,

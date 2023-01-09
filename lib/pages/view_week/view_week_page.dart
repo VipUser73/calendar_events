@@ -12,8 +12,23 @@ class ViewWeekPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: GetBuilder<CalendarWeekController>(
-        builder: (calendarWeekController) => CalendarWeekWidget(),
+          child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                  onPressed: () => Get.toNamed('/view_month'),
+                  icon: const Icon(
+                    Icons.more_horiz,
+                    color: Colors.white,
+                  ))
+            ],
+          ),
+          GetBuilder<CalendarWeekController>(
+            builder: (calendarWeekController) => CalendarWeekWidget(),
+          ),
+        ],
       )),
     );
   }

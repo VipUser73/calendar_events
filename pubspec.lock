@@ -341,6 +341,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  syncfusion_flutter_calendar:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_calendar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.4.42"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.4.42"
+  syncfusion_flutter_datepicker:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_datepicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.4.42"
   synchronized:
     dependency: transitive
     description:
@@ -362,13 +383,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.12"
-  time_range:
-    dependency: "direct main"
+  timezone:
+    dependency: transitive
     description:
-      name: time_range
+      name: timezone
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "0.9.0"
   vector_math:
     dependency: transitive
     description:

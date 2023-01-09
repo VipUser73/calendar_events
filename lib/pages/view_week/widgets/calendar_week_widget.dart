@@ -24,41 +24,43 @@ class CalendarWeekWidget extends GetView<CalendarWeekController> {
     return controller.obx(
       (state) {
         return GetBuilder<CalendarWeekController>(
-          builder: (calendarWeekController) => PageView.builder(
-              controller: pageController,
-              itemBuilder: (BuildContext context, pageIndex) {
-                final List<CalendarWeekData> nameDay =
-                    List.generate(7, (index) {
-                  List<Event> eventList = [];
-                  if (calendarWeekController.eventsFromDB.isNotEmpty) {
-                    try {
-                      eventList = calendarWeekController.eventsFromDB
-                          .where((element) =>
-                              element.dayMonth ==
-                              calendarWeekController.firstDayOfWeek
-                                  .add(Duration(days: index + 7 * pageIndex)))
-                          .toList();
-                    } catch (e) {}
-                  }
+          builder: (calendarWeekController) => Expanded(
+            child: PageView.builder(
+                controller: pageController,
+                itemBuilder: (BuildContext context, pageIndex) {
+                  final List<CalendarWeekData> nameDay =
+                      List.generate(7, (index) {
+                    List<Event> eventList = [];
+                    if (calendarWeekController.eventsFromDB.isNotEmpty) {
+                      try {
+                        eventList = calendarWeekController.eventsFromDB
+                            .where((element) =>
+                                element.dayMonth ==
+                                calendarWeekController.firstDayOfWeek
+                                    .add(Duration(days: index + 7 * pageIndex)))
+                            .toList();
+                      } catch (e) {}
+                    }
 
-                  return CalendarWeekData(
-                      calendarWeekController.firstDayOfWeek
-                          .add(Duration(days: index + 7 * pageIndex)),
-                      eventList);
-                });
+                    return CalendarWeekData(
+                        calendarWeekController.firstDayOfWeek
+                            .add(Duration(days: index + 7 * pageIndex)),
+                        eventList);
+                  });
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ...nameDay
-                        .map((e) => DayOfWeekWidget(
-                              dayAndMonth: e.dayAndMonth,
-                              eventList: e.eventList,
-                            ))
-                        .toList(),
-                  ],
-                );
-              }),
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ...nameDay
+                          .map((e) => DayOfWeekWidget(
+                                dayAndMonth: e.dayAndMonth,
+                                eventList: e.eventList,
+                              ))
+                          .toList(),
+                    ],
+                  );
+                }),
+          ),
         );
       },
       onLoading: const Center(child: CircularProgressIndicator()),
