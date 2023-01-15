@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ViewWeekPage extends StatelessWidget {
-  ViewWeekPage({Key? key}) : super(key: key);
-  final CalendarWeekController calendarWeekController =
-      Get.put(CalendarWeekController());
+  const ViewWeekPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Get.put(CalendarWeekController());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -25,9 +24,7 @@ class ViewWeekPage extends StatelessWidget {
                   ))
             ],
           ),
-          GetBuilder<CalendarWeekController>(
-            builder: (calendarWeekController) => CalendarWeekWidget(),
-          ),
+          const CalendarWeekWidget(),
         ],
       )),
     );

@@ -39,9 +39,9 @@ class CalendarApp extends StatelessWidget {
       locale: const Locale('ru'),
       //theme: ThemeData.dark(),
       getPages: [
-        GetPage(name: '/', page: () => ViewWeekPage()),
+        GetPage(name: '/', page: () => const ViewWeekPage()),
         GetPage(name: '/view_month', page: () => ViewMonthPage()),
-        GetPage(name: '/add_event', page: () => AddEventPage()),
+        GetPage(name: '/add_event', page: () => const AddEventPage()),
       ],
     );
   }

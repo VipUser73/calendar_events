@@ -5,10 +5,8 @@ import 'package:calendar_of_events/pages/add_event/widgets/text_field_widget.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AddEventPage extends StatelessWidget {
-  AddEventPage({Key? key}) : super(key: key);
-
-  final AddEventController addEventController = Get.put(AddEventController());
+class AddEventPage extends GetView<AddEventController> {
+  const AddEventPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +16,6 @@ class AddEventPage extends StatelessWidget {
           body: CustomScrollView(slivers: [
             SliverToBoxAdapter(
               child: SizedBox(
-                //height: 400,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -36,7 +33,7 @@ class AddEventPage extends StatelessWidget {
                               )),
                           IconButton(
                               onPressed: () {
-                                addEventController
+                                controller
                                   ..saveForm()
                                   ..titleController.clear();
                                 FocusScope.of(context).unfocus();
@@ -53,12 +50,11 @@ class AddEventPage extends StatelessWidget {
                     Obx(() => Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Switch(
-                              value: addEventController.flag.value,
-                              onChanged: (_) =>
-                                  addEventController.flag.toggle()),
+                              value: controller.flag.value,
+                              onChanged: (_) => controller.flag.toggle()),
                         )),
                     Obx(() => Visibility(
-                          visible: addEventController.flag.value,
+                          visible: controller.flag.value,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Row(
@@ -75,7 +71,7 @@ class AddEventPage extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: EventsListWidget(),
             )
           ]),

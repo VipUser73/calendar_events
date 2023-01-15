@@ -55,7 +55,7 @@ class AddEventController extends GetxController {
 
   void addEvent(Event event) async {
     await dbProvider.addEvent(event);
-    calendarWeekController.onInit();
+    eventsList.add(event);
   }
 
   void deleteEvent(String titleEvent) async {

@@ -12,8 +12,11 @@ class Utils {
     return date;
   }
 
-  static String toTime(DateTime dateTime) {
-    final time = DateFormat.Hm().format(dateTime);
-    return time;
+  static String toTime(DateTime? dateTime) {
+    if (dateTime != null) {
+      final time = DateFormat.Hm().format(dateTime);
+      return time;
+    }
+    return '';
   }
 }

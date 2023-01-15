@@ -1,19 +1,15 @@
 import 'package:calendar_of_events/controllers/add_event_controller.dart';
-import 'package:calendar_of_events/controllers/calendar_week_controller.dart';
 import 'package:calendar_of_events/models/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EventsListWidget extends StatelessWidget {
-  EventsListWidget({super.key});
-
-  final CalendarWeekController calendarWeekController = Get.find();
-  final AddEventController addEventController = Get.find();
+class EventsListWidget extends GetView<AddEventController> {
+  const EventsListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    addEventController.findEvents();
-    final eventsList = addEventController.eventsList;
+    controller.findEvents();
+    final eventsList = controller.eventsList;
 
     return Container(
         height: Get.size.height,
@@ -37,7 +33,7 @@ class EventsListWidget extends StatelessWidget {
                   key: UniqueKey(),
                   direction: DismissDirection.endToStart,
                   onDismissed: (_) =>
-                      addEventController.deleteEvent(eventsList[index].title),
+                      controller.deleteEvent(eventsList[index].title),
                   background: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -48,19 +44,16 @@ class EventsListWidget extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
-                  child: SizedBox(
-                    width: 200,
-                    child: ListTile(
-                        tileColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        textColor: Colors.white,
-                        title: Text(eventsList[index].title),
-                        subtitle: (eventsList[index].startTime != null)
-                            ? Text(
-                                "с ${Utils.toTime(eventsList[index].startTime!)}  до ${Utils.toTime(eventsList[index].finishTime!)}")
-                            : null),
-                  ),
+                  child: ListTile(
+                      tileColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      textColor: Colors.white,
+                      title: Text(eventsList[index].title),
+                      subtitle: (eventsList[index].startTime != null)
+                          ? Text(
+                              "с ${Utils.toTime(eventsList[index].startTime!)}  до ${Utils.toTime(eventsList[index].finishTime!)}")
+                          : null),
                 )),
           ),
         ));
