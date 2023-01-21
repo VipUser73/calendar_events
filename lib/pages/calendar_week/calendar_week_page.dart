@@ -1,13 +1,11 @@
-import 'package:calendar_of_events/controllers/calendar_week_controller.dart';
-import 'package:calendar_of_events/pages/view_week/widgets/calendar_week_widget.dart';
+import 'package:calendar_of_events/pages/calendar_week/widgets/calendar_week_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ViewWeekPage extends StatelessWidget {
-  const ViewWeekPage({Key? key}) : super(key: key);
+class CalendarWeekPage extends StatelessWidget {
+  const CalendarWeekPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Get.put(CalendarWeekController());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(

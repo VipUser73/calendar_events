@@ -11,8 +11,8 @@ class EventDataSource extends CalendarDataSource {
   @override
   DateTime getStartTime(int index) => getEvent(index).dayMonth;
 
-  // @override
-  // DateTime getEndTime(int index) => getEvent(index).finishTime!;
+  @override
+  DateTime getEndTime(int index) => getEvent(index).dayMonth;
 
   @override
   String getSubject(int index) => getEvent(index).title;

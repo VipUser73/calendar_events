@@ -9,7 +9,7 @@ class AddEventController extends GetxController {
   final dbProvider = DBProvider();
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
-  RxList<Event> eventsList = <Event>[].obs;
+  final RxList<Event> eventsList = <Event>[].obs;
   final flag = false.obs;
 
   void findEvents() {
@@ -20,20 +20,20 @@ class AddEventController extends GetxController {
 
   static DateTime currentDateTime = DateTime.now();
 
-  Rx<DateTime> selectedDate = DateTime(
+  final Rx<DateTime> selectedDate = DateTime(
     currentDateTime.year,
     currentDateTime.month,
     currentDateTime.day,
   ).obs;
 
-  Rx<DateTime> selectedStartTime = DateTime(
+  final Rx<DateTime> selectedStartTime = DateTime(
           currentDateTime.year,
           currentDateTime.month,
           currentDateTime.day,
           currentDateTime.hour,
           currentDateTime.minute)
       .obs;
-  Rx<DateTime> selectedFinishTime = DateTime(
+  final Rx<DateTime> selectedFinishTime = DateTime(
           currentDateTime.year,
           currentDateTime.month,
           currentDateTime.day,
