@@ -44,7 +44,7 @@ class CalendarMonthPage extends GetView<CalendarWeekController> {
               todayHighlightColor: const Color.fromRGBO(163, 87, 9, 1),
               dataSource: EventDataSource(controller.eventsFromDB),
               initialDisplayDate: DateTime.now(),
-              onLongPress: (details) {
+              onTap: (details) {
                 Get.find<AddEventController>().selectedDate.value =
                     details.date!;
                 Get.toNamed('/add_event');

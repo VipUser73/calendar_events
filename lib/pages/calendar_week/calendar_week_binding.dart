@@ -6,6 +6,6 @@ class CalendarWeekBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(CalendarWeekController());
-    Get.lazyPut(() => AddEventController());
+    Get.put(AddEventController());
   }
 }
