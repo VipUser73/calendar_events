@@ -41,8 +41,8 @@ class AddEventController extends GetxController {
           currentDateTime.minute)
       .obs;
   Future<void> saveForm() async {
-    final bool isValid = formKey.currentState!.validate();
-    if (isValid) {
+    final bool? isValid = formKey.currentState?.validate();
+    if (isValid == true) {
       final event = Event(
         title: titleController.text,
         dayMonth: selectedDate.value,
@@ -58,8 +58,10 @@ class AddEventController extends GetxController {
     eventsList.add(event);
   }
 
-  void deleteEvent(String titleEvent) async {
-    await dbProvider.deleteEvent(titleEvent);
+  void deleteEvent(int index) async {
+    await dbProvider.deleteEvent(eventsList[index].id!);
+    eventsList.removeAt(index);
+
     calendarWeekController.onInit();
   }
 }

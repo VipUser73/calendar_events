@@ -62,8 +62,8 @@ class DBProvider {
     return raw;
   }
 
-  deleteEvent(String title) async {
+  deleteEvent(int id) async {
     final db = await database;
-    return db.delete("LOGIN", where: "title = ?", whereArgs: [title]);
+    return db.delete("LOGIN", where: "id = ?", whereArgs: [id]);
   }
 }

@@ -1,16 +1,19 @@
 class Event {
+  int? id;
   String title;
   DateTime dayMonth;
   DateTime? startTime;
   DateTime? finishTime;
 
   Event({
+    this.id,
     required this.title,
     required this.dayMonth,
     this.startTime,
     this.finishTime,
   });
   factory Event.fromDB(Map<String, dynamic> dataDB) => Event(
+        id: dataDB["id"],
         title: dataDB["title"],
         dayMonth: DateTime.parse(dataDB["data"]),
         startTime: DateTime.tryParse(dataDB["start"]),

@@ -1,3 +1,4 @@
+import 'package:calendar_of_events/constants/colors.dart';
 import 'package:calendar_of_events/controllers/add_event_controller.dart';
 import 'package:calendar_of_events/models/utils.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,10 @@ class DateTimeWidget extends StatelessWidget {
       child: SizedBox(
         width: isData ? 170 : 80,
         height: 60,
-        child: Card(
-            color: Colors.grey.shade700,
+        child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(width: 2, color: darkBorder1),
+                borderRadius: const BorderRadius.all(Radius.circular(12))),
             child: Center(
                 child: Obx(
               () => Text(
@@ -28,7 +31,6 @@ class DateTimeWidget extends StatelessWidget {
                         ? addEventController.selectedStartTime.value
                         : addEventController.selectedFinishTime.value),
                 maxLines: 1,
-                style: const TextStyle(fontSize: 18),
               ),
             ))),
       ),

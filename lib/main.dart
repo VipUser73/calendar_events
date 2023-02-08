@@ -1,13 +1,18 @@
-import 'package:calendar_of_events/pages/calendar_month/calendar_month_page.dart';
-import 'package:calendar_of_events/pages/calendar_week/calendar_week_binding.dart';
+import 'package:calendar_of_events/get_pages.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:calendar_of_events/pages/add_event/add_event_page.dart';
-import 'package:calendar_of_events/pages/calendar_week/calendar_week_page.dart';
 import 'package:calendar_of_events/text_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() => runApp(const CalendarApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(const CalendarApp());
+}
 
 class CalendarApp extends StatelessWidget {
   const CalendarApp({Key? key}) : super(key: key);
@@ -16,13 +21,10 @@ class CalendarApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
-          textTheme: const TextTheme(
-            bodyText1: TextStyle(),
-            bodyText2: TextStyle(),
-          ).apply(
-            bodyColor: Colors.white,
-            displayColor: Colors.blue,
-          ),
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: Colors.white,
+                displayColor: Colors.pink,
+              ),
           scaffoldBackgroundColor: const Color.fromRGBO(36, 35, 32, 1)),
 
       debugShowCheckedModeBanner: false,
@@ -39,21 +41,7 @@ class CalendarApp extends StatelessWidget {
       //locale: Get.deviceLocale,
       locale: const Locale('ru'),
       //theme: ThemeData.dark(),
-      getPages: [
-        GetPage(
-          name: '/',
-          page: () => const CalendarWeekPage(),
-          binding: CalendarWeekBinding(),
-        ),
-        GetPage(
-          name: '/add_event',
-          page: () => const AddEventPage(),
-        ),
-        GetPage(
-          name: '/view_month',
-          page: () => const CalendarMonthPage(),
-        ),
-      ],
+      getPages: pages,
     );
   }
 }

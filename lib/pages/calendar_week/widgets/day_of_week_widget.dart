@@ -1,5 +1,7 @@
+import 'package:calendar_of_events/constants/colors.dart';
 import 'package:calendar_of_events/controllers/add_event_controller.dart';
 import 'package:calendar_of_events/controllers/calendar_week_controller.dart';
+import 'package:calendar_of_events/get_routes.dart';
 import 'package:calendar_of_events/models/event_model.dart';
 import 'package:calendar_of_events/models/utils.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
 
   @override
   Widget build(BuildContext context) {
-    final formatDayOfWeek = DateFormat.E('ru').format(dayAndMonth).capitalize!;
+    final formatDayOfWeek = DateFormat.E('ru').format(dayAndMonth).capitalize;
     final formatDayAndMonth = DateFormat.Md('ru').format(dayAndMonth);
     bool colorDateTimeNow = false;
     if (DateFormat.Md('ru').format(DateTime.now()) == formatDayAndMonth) {
@@ -28,7 +30,8 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
       child: GestureDetector(
         onTap: () {
           Get.find<AddEventController>().selectedDate.value = dayAndMonth;
-          Get.toNamed('/add_event')!.whenComplete(() => controller.onInit());
+          Get.toNamed(Routes.addEventPage)
+              ?.whenComplete(() => controller.onInit());
         },
         child: Container(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
@@ -39,8 +42,7 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
                   width: 70,
                   decoration: BoxDecoration(
                       color: colorDateTimeNow ? Colors.black38 : null,
-                      border: Border.all(
-                          width: 2, color: const Color.fromRGBO(163, 87, 9, 1)),
+                      border: Border.all(width: 2, color: darkBorder1),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(16))),
                   child: Center(
@@ -48,9 +50,7 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
                       "$formatDayOfWeek\n$formatDayAndMonth",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -60,9 +60,7 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
                     height: double.infinity,
                     decoration: BoxDecoration(
                         color: colorDateTimeNow ? Colors.black38 : null,
-                        border: Border.all(
-                            width: 2,
-                            color: const Color.fromRGBO(163, 87, 9, 1)),
+                        border: Border.all(width: 2, color: darkBorder2),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(16))),
                     child: eventList.isNotEmpty
@@ -90,7 +88,7 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
                                             null) ...[
                                           const SizedBox(height: 7),
                                           Text(
-                                              "${Utils.toTime(eventList[index].startTime!)} - ${Utils.toTime(eventList[index].finishTime!)}"),
+                                              "${Utils.toTime(eventList[index].startTime)} - ${Utils.toTime(eventList[index].finishTime)}"),
                                         ]
                                       ],
                                     ),

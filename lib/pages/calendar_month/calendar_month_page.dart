@@ -1,5 +1,7 @@
+import 'package:calendar_of_events/constants/colors.dart';
 import 'package:calendar_of_events/controllers/add_event_controller.dart';
 import 'package:calendar_of_events/controllers/calendar_week_controller.dart';
+import 'package:calendar_of_events/get_routes.dart';
 import 'package:calendar_of_events/models/event_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,14 +42,14 @@ class CalendarMonthPage extends GetView<CalendarWeekController> {
                           const TextStyle(color: Colors.white),
                       leadingDatesTextStyle:
                           const TextStyle(color: Colors.white))),
-              cellBorderColor: const Color.fromRGBO(163, 87, 9, 1),
-              todayHighlightColor: const Color.fromRGBO(163, 87, 9, 1),
+              cellBorderColor: darkBorder2,
+              todayHighlightColor: darkBorder2,
               dataSource: EventDataSource(controller.eventsFromDB),
               initialDisplayDate: DateTime.now(),
               onTap: (details) {
                 Get.find<AddEventController>().selectedDate.value =
-                    details.date!;
-                Get.toNamed('/add_event');
+                    details.date ?? DateTime.now();
+                Get.toNamed(Routes.addEventPage);
               },
             )),
       ),

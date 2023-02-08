@@ -1,3 +1,4 @@
+import 'package:calendar_of_events/constants/colors.dart';
 import 'package:calendar_of_events/controllers/calendar_week_controller.dart';
 import 'package:calendar_of_events/models/event_model.dart';
 import 'package:calendar_of_events/pages/calendar_week/widgets/day_of_week_widget.dart';
@@ -55,7 +56,8 @@ class CalendarWeekWidget extends GetView<CalendarWeekController> {
               }),
         );
       },
-      onLoading: const Center(child: CircularProgressIndicator()),
+      onLoading:
+          const Center(child: CircularProgressIndicator(color: darkBorder1)),
     );
   }
 }
