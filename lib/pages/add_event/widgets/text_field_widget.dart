@@ -16,6 +16,7 @@ class TextFieldWidget extends StatelessWidget {
       child: Form(
         key: addEventController.formKey,
         child: TextFormField(
+          textCapitalization: TextCapitalization.sentences,
           cursorColor: darkBorder1,
           decoration: InputDecoration(
             labelText: addEventHintText.keys.first.tr,

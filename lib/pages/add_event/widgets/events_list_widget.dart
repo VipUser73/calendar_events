@@ -35,17 +35,27 @@ class EventsListWidget extends GetView<AddEventController> {
               itemCount: eventsList.length,
               itemBuilder: ((context, index) => Dismissible(
                     key: UniqueKey(),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (_) => controller.deleteEvent(index),
-                    background: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                    direction: DismissDirection.horizontal,
+                    onDismissed: (DismissDirection direction) {
+                      switch (direction) {
+                        case DismissDirection.startToEnd:
+                          controller.updateEvent(eventsList[index]);
+                          break;
+                        case DismissDirection.endToStart:
+                          controller.deleteEvent(index);
+                          break;
+                        default:
+                      }
+                    },
+                    secondaryBackground: const DismissBackground(
+                      color: Colors.red,
                       alignment: Alignment.centerRight,
-                      child: const Icon(Icons.delete, color: Colors.white),
+                      icon: Icons.delete,
+                    ),
+                    background: const DismissBackground(
+                      color: Colors.blue,
+                      alignment: Alignment.centerLeft,
+                      icon: Icons.edit,
                     ),
                     child: ListTile(
                         tileColor: Colors.black,
@@ -60,6 +70,33 @@ class EventsListWidget extends GetView<AddEventController> {
                   )),
             ),
           )),
+    );
+  }
+}
+
+class DismissBackground extends StatelessWidget {
+  const DismissBackground({
+    required this.color,
+    required this.alignment,
+    required this.icon,
+    super.key,
+  });
+
+  final Color color;
+  final Alignment alignment;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      alignment: alignment,
+      child: Icon(icon, color: Colors.white),
     );
   }
 }

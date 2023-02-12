@@ -9,11 +9,13 @@ class CalendarWeekPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: Column(
-        children: const [
-          AppBarWidget(),
-          CalendarWeekWidget(),
-        ],
+          child: Center(
+        child: Column(
+          children: const [
+            AppBarWidget(),
+            CalendarWeekWidget(),
+          ],
+        ),
       )),
     );
   }

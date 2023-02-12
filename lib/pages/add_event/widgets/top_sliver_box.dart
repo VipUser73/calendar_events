@@ -28,9 +28,8 @@ class TopSliverBox extends GetView<AddEventController> {
                       )),
                   IconButton(
                       onPressed: () {
-                        controller
-                          ..saveForm()
-                          ..titleController.clear();
+                        controller.saveForm();
+
                         FocusScope.of(context).unfocus();
                       },
                       icon: const Icon(

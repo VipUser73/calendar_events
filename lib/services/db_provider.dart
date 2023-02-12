@@ -48,18 +48,17 @@ class DBProvider {
     return res.map((e) => Event.fromDB(e)).toList();
   }
 
-  updateForm(Event event, String name) async {
+  updateEvent(Event event) async {
     final db = await database;
-    var raw = await db.rawUpdate(
-        "UPDATE LOGIN SET title = ?, data = ?, start = ?, finish = ? WHERE title = ?",
+    await db.rawUpdate(
+        "UPDATE LOGIN SET title = ?, data = ?, start = ?, finish = ? WHERE id = ?",
         [
           event.title,
           event.dayMonth.toString(),
           event.startTime.toString(),
           event.finishTime.toString(),
-          name
+          event.id
         ]);
-    return raw;
   }
 
   deleteEvent(int id) async {

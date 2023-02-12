@@ -10,7 +10,9 @@ class AddEventController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final RxList<Event> eventsList = <Event>[].obs;
+  int? eventId;
   final flag = false.obs;
+  final isEdit = false.obs;
 
   void findEvents() {
     eventsList.value = calendarWeekController.eventsFromDB
@@ -44,24 +46,43 @@ class AddEventController extends GetxController {
     final bool? isValid = formKey.currentState?.validate();
     if (isValid == true) {
       final event = Event(
+        id: eventId,
         title: titleController.text,
         dayMonth: selectedDate.value,
         startTime: flag.value ? selectedStartTime.value : null,
         finishTime: flag.value ? selectedFinishTime.value : null,
       );
-      addEvent(event);
+      isEdit.value ? saveUpdateEvent(event) : saveAddEvent(event);
     }
   }
 
-  void addEvent(Event event) async {
+  void saveAddEvent(Event event) async {
     await dbProvider.addEvent(event);
     eventsList.add(event);
+    titleController.clear();
+  }
+
+  void updateEvent(Event event) async {
+    isEdit.value = true;
+    eventId = event.id;
+    titleController.text = event.title;
+    if (event.startTime != null && event.finishTime != null) {
+      flag.value = true;
+      selectedStartTime.value = event.startTime!;
+      selectedFinishTime.value = event.finishTime!;
+    }
+  }
+
+  void saveUpdateEvent(Event event) async {
+    await dbProvider.updateEvent(event);
+    titleController.clear();
+    final index = eventsList.indexWhere((element) => element.id == event.id);
+    eventsList[index] = event;
   }
 
   void deleteEvent(int index) async {
     await dbProvider.deleteEvent(eventsList[index].id!);
     eventsList.removeAt(index);
-
     calendarWeekController.onInit();
   }
 }
