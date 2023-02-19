@@ -14,10 +14,15 @@ class AddEventController extends GetxController {
   final flag = false.obs;
   final isEdit = false.obs;
 
-  void findEvents() {
-    eventsList.value = calendarWeekController.eventsFromDB
-        .where((element) => element.dayMonth == selectedDate.value)
-        .toList();
+  void findEvents() async {
+    // eventsList.value = calendarWeekController.eventsFromDB
+    //     .where((element) => element.dayMonth == selectedDate.value)
+    //     .toList();
+    // eventsList.sort((a, b) =>
+    //     (a.startTime ?? a.dayMonth).compareTo(b.startTime ?? b.dayMonth));
+
+    eventsList.value =
+        await dbProvider.getSelectEvents(selectedDate.toString());
   }
 
   static DateTime currentDateTime = DateTime.now();
@@ -58,7 +63,7 @@ class AddEventController extends GetxController {
 
   void saveAddEvent(Event event) async {
     await dbProvider.addEvent(event);
-    eventsList.add(event);
+    findEvents();
     titleController.clear();
   }
 
@@ -83,6 +88,5 @@ class AddEventController extends GetxController {
   void deleteEvent(int index) async {
     await dbProvider.deleteEvent(eventsList[index].id!);
     eventsList.removeAt(index);
-    calendarWeekController.onInit();
   }
 }

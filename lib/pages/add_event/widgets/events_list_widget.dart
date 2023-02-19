@@ -58,9 +58,15 @@ class EventsListWidget extends GetView<AddEventController> {
                       icon: Icons.edit,
                     ),
                     child: ListTile(
-                        tileColor: Colors.black,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                          side: BorderSide(width: 5),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        leading: const Icon(
+                          Icons.circle,
+                          color: darkBorder1,
+                          size: 25,
+                        ),
                         textColor: Colors.white,
                         title: Text(eventsList[index].title),
                         subtitle: (eventsList[index].startTime != null)

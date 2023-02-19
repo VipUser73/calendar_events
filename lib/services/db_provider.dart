@@ -48,6 +48,12 @@ class DBProvider {
     return res.map((e) => Event.fromDB(e)).toList();
   }
 
+  Future<List<Event>> getSelectEvents(String data) async {
+    final db = await database;
+    var res = await db.query("LOGIN", where: 'data = ?', whereArgs: [data]);
+    return res.map((e) => Event.fromDB(e)).toList();
+  }
+
   updateEvent(Event event) async {
     final db = await database;
     await db.rawUpdate(

@@ -21,7 +21,10 @@ class TopSliverBox extends GetView<AddEventController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                      onPressed: () => Get.back(),
+                      onPressed: () {
+                        controller.titleController.clear();
+                        Get.back();
+                      },
                       icon: const Icon(
                         Icons.close,
                         color: Colors.white,
