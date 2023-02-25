@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 class DayOfWeekWidget extends GetView<CalendarWeekController> {
   final DateTime dayAndMonth;
-  final List<Event> eventList;
+  final List<Event>? eventList;
   const DayOfWeekWidget({
     required this.dayAndMonth,
     required this.eventList,
@@ -58,30 +58,31 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
                   child: Container(
                     height: double.infinity,
                     decoration: BoxDecoration(
-                        color: colorDateTimeNow ? Colors.black38 : null,
-                        border: Border.all(width: 2, color: darkBorder2),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(16))),
-                    child: eventList.isNotEmpty
+                      color: colorDateTimeNow ? Colors.black38 : null,
+                      border: Border.all(width: 2, color: darkBorder2),
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    ),
+                    child: eventList != null
                         ? ListView.builder(
                             primary: false,
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: eventList.length,
+                            itemCount: eventList?.length,
                             itemBuilder: ((context, index) => SizedBox(
                                   width: (Get.size.width - 94) / 2,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        eventList[index].title,
+                                        eventList![index].title,
                                         maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(fontSize: 16),
                                         textAlign: TextAlign.center,
                                       ),
-                                      eventList[index].startTime != null
+                                      eventList![index].startTime != null
                                           ? Text(
-                                              "${Utils.toTime(eventList[index].startTime)} - ${Utils.toTime(eventList[index].finishTime)}",
+                                              "${Utils.toTime(eventList![index].startTime)} - ${Utils.toTime(eventList![index].finishTime)}",
                                               style:
                                                   const TextStyle(fontSize: 12),
                                               textAlign: TextAlign.center,

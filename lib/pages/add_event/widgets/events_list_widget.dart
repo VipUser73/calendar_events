@@ -14,10 +14,9 @@ class EventsListWidget extends GetView<AddEventController> {
 
     return SliverToBoxAdapter(
       child: Container(
-          height: Get.size.height,
+          height: Get.height,
           decoration: BoxDecoration(
               color: Colors.grey.shade700,
-              border: Border.all(width: 1, color: darkBorder1),
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(30)),
               gradient: LinearGradient(
@@ -29,17 +28,21 @@ class EventsListWidget extends GetView<AddEventController> {
                 end: Alignment.bottomCenter,
               )),
           child: Obx(
-            () => ListView.builder(
-              physics:
-                  const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
-              itemCount: eventsList.length,
-              itemBuilder: ((context, index) => Dismissible(
+            () => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView.builder(
+                physics:
+                    const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
+                itemCount: eventsList.length,
+                itemBuilder: ((context, index) {
+                  final currentEvent = eventsList[index];
+                  return Dismissible(
                     key: UniqueKey(),
                     direction: DismissDirection.horizontal,
                     onDismissed: (DismissDirection direction) {
                       switch (direction) {
                         case DismissDirection.startToEnd:
-                          controller.updateEvent(eventsList[index]);
+                          controller.updateEvent(index);
                           break;
                         case DismissDirection.endToStart:
                           controller.deleteEvent(index);
@@ -58,22 +61,36 @@ class EventsListWidget extends GetView<AddEventController> {
                       icon: Icons.edit,
                     ),
                     child: ListTile(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 5),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        leading: const Icon(
-                          Icons.circle,
-                          color: darkBorder1,
-                          size: 25,
+                        leading: IconButton(
+                          onPressed: () => controller.updateStatus(index),
+                          icon: Icon(
+                            Icons.circle,
+                            color: currentEvent.isDone ? darkBorder1 : null,
+                            size: 30,
+                          ),
                         ),
                         textColor: Colors.white,
-                        title: Text(eventsList[index].title),
-                        subtitle: (eventsList[index].startTime != null)
+                        title: Text(
+                          currentEvent.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: currentEvent.isDone
+                                ? Colors.grey.shade400
+                                : null,
+                            decoration: currentEvent.isDone
+                                ? TextDecoration.lineThrough
+                                : null,
+                          ),
+                        ),
+                        subtitle: (currentEvent.startTime != null)
                             ? Text(
-                                "с ${Utils.toTime(eventsList[index].startTime)}  до ${Utils.toTime(eventsList[index].finishTime)}")
+                                "с ${Utils.toTime(currentEvent.startTime)} до ${Utils.toTime(currentEvent.finishTime)}")
                             : null),
-                  )),
+                  );
+                }),
+              ),
             ),
           )),
     );

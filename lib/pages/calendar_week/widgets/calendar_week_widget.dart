@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 class CalendarWeekData {
   final DateTime dayAndMonth;
-  final List<Event> eventList;
+  final List<Event>? eventList;
   CalendarWeekData(this.dayAndMonth, this.eventList);
 }
 
@@ -24,16 +24,14 @@ class CalendarWeekWidget extends GetView<CalendarWeekController> {
               itemBuilder: (BuildContext context, pageIndex) {
                 final List<CalendarWeekData> nameDay =
                     List.generate(7, (index) {
-                  List<Event> eventList = [];
+                  List<Event>? eventList;
                   if (controller.eventsFromDB.isNotEmpty) {
-                    try {
-                      eventList = controller.eventsFromDB
-                          .where((element) =>
-                              element.dayMonth ==
-                              controller.firstDayOfWeek
-                                  .add(Duration(days: index + 7 * pageIndex)))
-                          .toList();
-                    } catch (_) {}
+                    eventList = controller.eventsFromDB
+                        .where((element) =>
+                            element.dayMonth ==
+                            controller.firstDayOfWeek
+                                .add(Duration(days: index + 7 * pageIndex)))
+                        .toList();
                   }
 
                   return CalendarWeekData(

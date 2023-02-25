@@ -18,12 +18,13 @@ class DBProvider {
     String path = join(documentsDirectory.path, "Events.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE LOGIN ("
+      await db.execute("CREATE TABLE EVENTS ("
           "id INTEGER PRIMARY KEY,"
           "title TEXT,"
           "data TEXT,"
           "start TEXT,"
-          "finish TEXT"
+          "finish TEXT,"
+          "status INTEGER"
           ")");
     });
   }
@@ -31,7 +32,7 @@ class DBProvider {
   addEvent(Event event) async {
     final db = await database;
     var raw = await db.rawInsert(
-        "INSERT INTO LOGIN(title, data, start, finish)"
+        "INSERT INTO EVENTS(title, data, start, finish)"
         "VALUES(?, ?, ?, ?)",
         [
           event.title,
@@ -44,20 +45,20 @@ class DBProvider {
 
   Future<List<Event>> getEvents() async {
     final db = await database;
-    var res = await db.query("LOGIN");
+    var res = await db.query("EVENTS");
     return res.map((e) => Event.fromDB(e)).toList();
   }
 
   Future<List<Event>> getSelectEvents(String data) async {
     final db = await database;
-    var res = await db.query("LOGIN", where: 'data = ?', whereArgs: [data]);
+    var res = await db.query("EVENTS", where: 'data = ?', whereArgs: [data]);
     return res.map((e) => Event.fromDB(e)).toList();
   }
 
   updateEvent(Event event) async {
     final db = await database;
     await db.rawUpdate(
-        "UPDATE LOGIN SET title = ?, data = ?, start = ?, finish = ? WHERE id = ?",
+        "UPDATE EVENTS SET title = ?, data = ?, start = ?, finish = ? WHERE id = ?",
         [
           event.title,
           event.dayMonth.toString(),
@@ -67,8 +68,14 @@ class DBProvider {
         ]);
   }
 
+  updateStatus(int? id, int status) async {
+    final db = await database;
+    await db
+        .rawUpdate("UPDATE EVENTS SET status = ? WHERE id = ?", [status, id]);
+  }
+
   deleteEvent(int id) async {
     final db = await database;
-    return db.delete("LOGIN", where: "id = ?", whereArgs: [id]);
+    return db.delete("EVENTS", where: "id = ?", whereArgs: [id]);
   }
 }

@@ -17,7 +17,7 @@ class CalendarWeekController extends GetxController with StateMixin {
 
     dbProvider.getEvents().then((response) {
       eventsFromDB.value = response;
-      update();
+      //update();
       change(response, status: RxStatus.success());
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));

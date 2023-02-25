@@ -10,7 +10,7 @@ class AddEventController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final RxList<Event> eventsList = <Event>[].obs;
-  int? eventId;
+  int currentIndex = 0;
   final flag = false.obs;
   final isEdit = false.obs;
 
@@ -51,11 +51,12 @@ class AddEventController extends GetxController {
     final bool? isValid = formKey.currentState?.validate();
     if (isValid == true) {
       final event = Event(
-        id: eventId,
+        id: eventsList[currentIndex].id,
         title: titleController.text,
         dayMonth: selectedDate.value,
         startTime: flag.value ? selectedStartTime.value : null,
         finishTime: flag.value ? selectedFinishTime.value : null,
+        isDone: eventsList[currentIndex].isDone,
       );
       isEdit.value ? saveUpdateEvent(event) : saveAddEvent(event);
     }
@@ -67,15 +68,23 @@ class AddEventController extends GetxController {
     titleController.clear();
   }
 
-  void updateEvent(Event event) async {
+  void updateEvent(int index) async {
+    final event = eventsList[index];
     isEdit.value = true;
-    eventId = event.id;
+    currentIndex = index;
     titleController.text = event.title;
     if (event.startTime != null && event.finishTime != null) {
       flag.value = true;
       selectedStartTime.value = event.startTime!;
       selectedFinishTime.value = event.finishTime!;
     }
+  }
+
+  void updateStatus(int index) async {
+    eventsList[index].isDone = !eventsList[index].isDone;
+    eventsList.refresh();
+    await dbProvider.updateStatus(
+        eventsList[index].id, eventsList[index].isDone ? 1 : 0);
   }
 
   void saveUpdateEvent(Event event) async {
