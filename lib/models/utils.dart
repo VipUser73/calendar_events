@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -8,7 +9,8 @@ class Utils {
   }
 
   static String toDate(DateTime dateTime) {
-    final date = DateFormat.yMMMEd('ru').format(dateTime);
+    final date =
+        DateFormat.yMMMEd(Get.deviceLocale?.languageCode).format(dateTime);
     return date;
   }
 

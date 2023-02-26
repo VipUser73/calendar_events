@@ -1,9 +1,9 @@
-import 'package:calendar_of_events/get_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({super.key});
+  const AppBarWidget({required this.press, super.key});
+
+  final VoidCallback press;
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +11,13 @@ class AppBarWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         IconButton(
-            onPressed: () => Get.toNamed(Routes.calendarMonthPage),
-            icon: const Icon(
-              Icons.more_horiz,
-              color: Colors.white,
-            ))
+          onPressed: press,
+          splashRadius: 20,
+          icon: const Icon(
+            Icons.calendar_month,
+            color: Colors.white,
+          ),
+        )
       ],
     );
   }

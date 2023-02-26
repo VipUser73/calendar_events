@@ -10,7 +10,7 @@ class AddEventController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final RxList<Event> eventsList = <Event>[].obs;
-  int currentIndex = 0;
+  int? currentIndex;
   final flag = false.obs;
   final isEdit = false.obs;
 
@@ -51,15 +51,16 @@ class AddEventController extends GetxController {
     final bool? isValid = formKey.currentState?.validate();
     if (isValid == true) {
       final event = Event(
-        id: eventsList[currentIndex].id,
+        id: currentIndex != null ? eventsList[currentIndex!].id : null,
         title: titleController.text,
         dayMonth: selectedDate.value,
         startTime: flag.value ? selectedStartTime.value : null,
         finishTime: flag.value ? selectedFinishTime.value : null,
-        isDone: eventsList[currentIndex].isDone,
+        isDone: currentIndex != null ? eventsList[currentIndex!].isDone : false,
       );
       isEdit.value ? saveUpdateEvent(event) : saveAddEvent(event);
     }
+    isEdit.value = false;
   }
 
   void saveAddEvent(Event event) async {

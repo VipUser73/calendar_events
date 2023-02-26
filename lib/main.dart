@@ -20,13 +20,13 @@ class CalendarApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      themeMode: ThemeMode.dark,
       theme: ThemeData(
           textTheme: Theme.of(context).textTheme.apply(
                 bodyColor: Colors.white,
                 displayColor: Colors.pink,
               ),
           scaffoldBackgroundColor: const Color.fromRGBO(36, 35, 32, 1)),
-
       debugShowCheckedModeBanner: false,
       translations: TextResources(),
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
@@ -38,9 +38,7 @@ class CalendarApp extends StatelessWidget {
         Locale('en'),
         Locale('ru'),
       ],
-      //locale: Get.deviceLocale,
-      locale: const Locale('ru'),
-      //theme: ThemeData.dark(),
+      locale: Get.deviceLocale,
       getPages: pages,
     );
   }

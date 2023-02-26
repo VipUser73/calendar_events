@@ -6,6 +6,10 @@ const Map<String, String> appBarTitle = {
 const Map<String, String> addEventHintText = {
   'Add title of the event': 'Введите заголовок события'
 };
+// const Map<String, String> switchCalendarText = {
+//   'Month': 'Месяц',
+//   'Week': 'Неделя'
+// };
 
 class TextResources extends Translations {
   @override

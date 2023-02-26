@@ -43,6 +43,23 @@ class DateTimeWidget extends StatelessWidget {
       initialDate: addEventController.selectedDate.value,
       firstDate: DateTime(2023),
       lastDate: DateTime(2033),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Colors.yellow, // header background color
+              onPrimary: Colors.black, // header text color
+              onSurface: Colors.green, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (data != null && data != addEventController.selectedDate.value) {
       addEventController.selectedDate.value = data;

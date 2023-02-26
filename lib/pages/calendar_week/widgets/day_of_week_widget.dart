@@ -19,8 +19,11 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
 
   @override
   Widget build(BuildContext context) {
-    final formatDayOfWeek = DateFormat.E('ru').format(dayAndMonth).capitalize;
-    final formatDayAndMonth = DateFormat.Md('ru').format(dayAndMonth);
+    final formatDayOfWeek = DateFormat.E(Get.deviceLocale?.languageCode)
+        .format(dayAndMonth)
+        .capitalize;
+    final formatDayAndMonth =
+        DateFormat.Md(Get.deviceLocale?.languageCode).format(dayAndMonth);
     bool colorDateTimeNow = false;
     if (DateFormat.Md('ru').format(DateTime.now()) == formatDayAndMonth) {
       colorDateTimeNow = true;
@@ -63,11 +66,18 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
                       borderRadius: const BorderRadius.all(Radius.circular(16)),
                     ),
                     child: eventList != null
-                        ? ListView.builder(
+                        ? ListView.separated(
                             primary: false,
                             //shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: eventList?.length,
+                            itemCount: eventList!.length,
+                            separatorBuilder: (context, index) =>
+                                const VerticalDivider(
+                                  indent: 18,
+                                  endIndent: 18,
+                                  width: 2,
+                                  color: darkBorder1,
+                                ),
                             itemBuilder: ((context, index) => SizedBox(
                                   width: (Get.size.width - 94) / 2,
                                   child: Column(
