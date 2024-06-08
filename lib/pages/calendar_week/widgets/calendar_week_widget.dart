@@ -12,7 +12,7 @@ class CalendarWeekData {
 }
 
 class CalendarWeekWidget extends GetView<CalendarWeekController> {
-  const CalendarWeekWidget({Key? key}) : super(key: key);
+  const CalendarWeekWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +43,12 @@ class CalendarWeekWidget extends GetView<CalendarWeekController> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ...nameDay
-                        .map((e) => DayOfWeekWidget(
-                              dayAndMonth: e.dayAndMonth,
-                              eventList: e.eventList,
-                            ))
-                        .toList(),
+                    ...nameDay.map(
+                      (e) => DayOfWeekWidget(
+                        dayAndMonth: e.dayAndMonth,
+                        eventList: e.eventList,
+                      ),
+                    ),
                   ],
                 );
               }),

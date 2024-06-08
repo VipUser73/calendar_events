@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarMonthPage extends GetView<CalendarWeekController> {
-  const CalendarMonthPage({Key? key}) : super(key: key);
+  const CalendarMonthPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

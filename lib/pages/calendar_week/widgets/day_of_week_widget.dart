@@ -14,8 +14,8 @@ class DayOfWeekWidget extends GetView<CalendarWeekController> {
   const DayOfWeekWidget({
     required this.dayAndMonth,
     required this.eventList,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

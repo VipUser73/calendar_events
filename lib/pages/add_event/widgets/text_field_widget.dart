@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TextFieldWidget extends StatelessWidget {
-  TextFieldWidget({Key? key}) : super(key: key);
+  TextFieldWidget({super.key});
 
   final AddEventController addEventController = Get.find();
 

@@ -15,7 +15,7 @@ void main() async {
 }
 
 class CalendarApp extends StatelessWidget {
-  const CalendarApp({Key? key}) : super(key: key);
+  const CalendarApp({super.key});
 
   @override
   Widget build(BuildContext context) {
